@@ -28,18 +28,26 @@ const Downloader = () => {
     setLoading(false);
 
     if (response.ok) {
-      const blob = await response.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = downloadUrl;
-      a.download = 'video.mp4';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(downloadUrl);
-    } else {
-      alert('Failed to download video');
-    }
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+      
+        // Prompt the user to enter the filename
+        const filename = prompt('Enter the filename for the downloaded video:', 'video.mp4');
+        if (filename) {
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = downloadUrl;
+          a.download = filename+'.mp4';  // Use the filename provided by the user
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(downloadUrl);
+        } else {
+          alert('Download cancelled. No filename provided.');
+        }
+      } else {
+        alert('Failed to download video');
+      }
+      
   };
 
   return (
